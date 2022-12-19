@@ -17,30 +17,37 @@ from diagrams.aws.compute import ECR
 
 def main():
     with Diagram("Infrastructure Diagram", show=False):
-
         SecretsManager("Secrets Manager")
-        ECR("Container registry")
+        S3("S3")
 
         entry = Subnet("Entry")
 
         lb = ALB("ALB")
 
         Cloudwatch("CloudWatch")
-        S3("S3")
+
+        ecr = ECR("AWS ECR")
 
         with Cluster("VPC"):
             bastion = EC2Instance("Bastion")
 
             with Cluster("Auto scaling groups"):
-                svc_group = [Fargate("ap-southeash-1a"), Fargate("ap-southeash-1b")]
+                with Cluster("ap-southeash-1a"):
+                    fargate_zone_one = Fargate("Fargate")
+                with Cluster("ap-southeash-1b"):
+                    fargate_zone_two = Fargate("Fargate")
+
+                fargate_list = [fargate_zone_one, fargate_zone_two]
 
             db_primary = RDS("AZ RDS")
             cache = ElastiCache("AZ ElastiCache")
 
-            entry >> lb >> svc_group
+            entry >> lb >> fargate_list
             entry >> bastion
-            svc_group >> db_primary
-            svc_group >> cache
+            fargate_list >> db_primary
+            fargate_list >> cache
+            fargate_list >> ecr
+            ecr >> fargate_list
 
 
 if __name__ == "__main__":
