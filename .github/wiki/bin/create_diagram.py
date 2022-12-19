@@ -46,7 +46,6 @@ def main():
             entry >> bastion
             fargate_list >> db_primary
             fargate_list >> cache
-            fargate_list >> ecr
             ecr >> fargate_list
 
 
