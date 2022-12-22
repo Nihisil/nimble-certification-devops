@@ -1,4 +1,12 @@
-terraform {}
+terraform {
+  cloud {
+    organization = "alex-personal-terraform"
+
+    workspaces {
+      tags = ["aws-infrastructure"]
+    }
+  }
+}
 
 provider "aws" {
   region     = var.region

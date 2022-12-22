@@ -1,4 +1,12 @@
-terraform {}
+terraform {
+  cloud {
+    organization = "alex-personal-terraform"
+
+    workspaces {
+      name = "devops-ic-shared"
+    }
+  }
+}
 
 provider "aws" {
   region     = var.region
