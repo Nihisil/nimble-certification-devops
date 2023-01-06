@@ -1,0 +1,19 @@
+name: Publish Wiki
+
+on:
+  push:
+    paths:
+      - .github/wiki/**
+    branches:
+      - develop
+  workflow_dispatch:
+
+jobs:
+  publish:
+    name: Publish Wiki
+    uses: nimblehq/github-actions-workflows/.github/workflows/publish_wiki.yml@0.1.0
+    with:
+      USER_NAME: github-wiki-workflow
+      USER_EMAIL: bot@nimblehq.co
+    secrets:
+      USER_TOKEN: ${{ secrets.USER_ACCESS_TOKEN }}
