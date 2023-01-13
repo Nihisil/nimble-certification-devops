@@ -7,3 +7,13 @@ terraform {
     }
   }
 }
+
+locals {
+  namespace = "${var.app_name}-${var.environment}"
+}
+
+module "vpc" {
+  source = "../modules/vpc"
+
+  namespace = local.namespace
+}
