@@ -17,3 +17,13 @@ module "vpc" {
 
   namespace = local.namespace
 }
+
+module "kms" {
+  source = "../modules/kms"
+
+  namespace = local.namespace
+
+  secrets = {
+    secret_key_base = var.secret_key_base
+  }
+}
