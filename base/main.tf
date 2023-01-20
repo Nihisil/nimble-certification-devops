@@ -21,8 +21,10 @@ module "vpc" {
 module "security_group" {
   source = "../modules/security_group"
 
-  namespace = local.namespace
-  vpc_id    = module.vpc.vpc_id
+  namespace                   = local.namespace
+  vpc_id                      = module.vpc.vpc_id
+  app_port                    = var.app_port
+  private_subnets_cidr_blocks = module.vpc.private_subnets_cidr_blocks
 }
 
 module "kms" {
@@ -44,4 +46,30 @@ module "alb" {
   subnet_ids         = module.vpc.public_subnet_ids
   security_group_ids = module.security_group.alb_security_group_ids
   health_check_path  = var.health_check_path
+}
+
+module "ecs" {
+  source = "../modules/ecs"
+
+  subnets                            = module.vpc.private_subnet_ids
+  namespace                          = local.namespace
+  region                             = var.region
+  app_host                           = module.alb.alb_dns_name
+  app_port                           = var.app_port
+  ecr_repo_name                      = var.ecr_repo_name
+  ecr_tag                            = var.ecr_tag
+  security_groups                    = module.security_group.ecs_security_group_ids
+  alb_target_group_arn               = module.alb.alb_target_group_arn
+  desired_count                      = var.ecs.task_desired_count
+  cpu                                = var.ecs.task_cpu
+  memory                             = var.ecs.task_memory
+  deployment_maximum_percent         = var.ecs.deployment_maximum_percent
+  deployment_minimum_healthy_percent = var.ecs.deployment_minimum_healthy_percent
+  web_container_cpu                  = var.ecs.web_container_cpu
+  web_container_memory               = var.ecs.web_container_memory
+  worker_container_cpu               = var.ecs.worker_container_cpu
+  worker_container_memory            = var.ecs.worker_container_memory
+
+  secrets_variables     = module.kms.secrets_variables
+  secret_arns           = module.kms.secret_arns
 }
