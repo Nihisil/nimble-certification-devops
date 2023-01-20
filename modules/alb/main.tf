@@ -7,12 +7,6 @@ resource "aws_lb" "main" {
   security_groups    = var.security_group_ids
 
   enable_deletion_protection = true
-
-  access_logs {
-    bucket  = "${var.namespace}-alb-log"
-    enabled = true
-  }
-
   drop_invalid_header_fields = true
 }
 
