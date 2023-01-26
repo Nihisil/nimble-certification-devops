@@ -1,6 +1,6 @@
 variable "app_name" {
   description = "Application name"
-  default     = "devops-ic"
+  type        = string
 }
 
 variable "environment" {
@@ -44,11 +44,6 @@ variable "health_check_path" {
   type        = string
 }
 
-variable "ecr_repo_name" {
-  description = "ECR repo name"
-  type        = string
-}
-
 variable "ecr_tag" {
   description = "ECR tag to deploy"
   type        = string
@@ -57,13 +52,8 @@ variable "ecr_tag" {
 variable "ecs" {
   description = "ECS input variables"
   type = object({
-    task_cpu                           = number # See https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-cpu-memory-error.html for the available values
-    task_memory                        = number
-    task_desired_count                 = number
     web_container_cpu                  = number
     web_container_memory               = number
-    worker_container_cpu               = number
-    worker_container_memory            = number
     deployment_maximum_percent         = number
     deployment_minimum_healthy_percent = number
   })

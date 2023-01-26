@@ -1,6 +1,6 @@
 variable "app_name" {
   description = "Application name"
-  default     = "devops-ic"
+  type        = string
 }
 
 variable "environment" {

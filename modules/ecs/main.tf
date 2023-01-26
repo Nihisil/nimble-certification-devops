@@ -24,8 +24,6 @@ locals {
     app_port                           = var.app_port
     web_container_cpu                  = var.web_container_cpu
     web_container_memory               = var.web_container_memory
-    worker_container_cpu               = var.worker_container_cpu
-    worker_container_memory            = var.worker_container_memory
     deployment_maximum_percent         = var.deployment_maximum_percent
     deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
     aws_ecr_repository                 = data.aws_ecr_repository.repo.repository_url
@@ -95,6 +93,7 @@ resource "aws_iam_role_policy_attachment" "ecs_task_execution_role" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
 }
 
+#tfsec:ignore:aws-iam-no-policy-wildcards
 resource "aws_iam_policy" "ecs_task_execution_kms" {
   policy = jsonencode(local.ecs_task_execution_kms_policy)
 }
@@ -121,12 +120,17 @@ resource "aws_iam_role" "ecs_task_role" {
 
 resource "aws_ecs_cluster" "main" {
   name = "${var.namespace}-ecs-cluster"
+
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
 }
 
 resource "aws_ecs_task_definition" "main" {
   family                   = "${var.namespace}-service"
-  cpu                      = var.cpu
-  memory                   = var.memory
+  cpu                      = var.web_container_cpu
+  memory                   = var.web_container_memory
   network_mode             = "awsvpc"
   task_role_arn            = aws_iam_role.ecs_task_role.arn
   execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
@@ -140,7 +144,6 @@ resource "aws_ecs_service" "main" {
   launch_type                        = "FARGATE"
   deployment_maximum_percent         = var.deployment_maximum_percent
   deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
-  desired_count                      = var.desired_count
   task_definition                    = "${aws_ecs_task_definition.main.family}:${max(aws_ecs_task_definition.main.revision, data.aws_ecs_task_definition.task.revision)}"
 
   deployment_circuit_breaker {

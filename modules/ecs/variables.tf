@@ -42,16 +42,6 @@ variable "alb_target_group_arn" {
   description = "ALB target group ARN"
 }
 
-variable "cpu" {
-  description = "ECS task definition CPU"
-  type        = number
-}
-
-variable "memory" {
-  description = "ECS task definition memory"
-  type        = number
-}
-
 variable "deployment_maximum_percent" {
   description = "Upper limit of the number of running tasks running during deployment"
   type        = number
@@ -62,11 +52,6 @@ variable "deployment_minimum_healthy_percent" {
   type        = number
 }
 
-variable "desired_count" {
-  description = "ECS task definition instance number"
-  type        = number
-}
-
 variable "web_container_cpu" {
   description = "ECS web container CPU"
   type        = number
@@ -74,16 +59,6 @@ variable "web_container_cpu" {
 
 variable "web_container_memory" {
   description = "ECS web container memory"
-  type        = number
-}
-
-variable "worker_container_cpu" {
-  description = "ECS worker container CPU"
-  type        = number
-}
-
-variable "worker_container_memory" {
-  description = "ECS worker container memory"
   type        = number
 }
 
