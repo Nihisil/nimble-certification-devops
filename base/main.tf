@@ -18,6 +18,12 @@ module "vpc" {
   namespace = local.namespace
 }
 
+module "log" {
+  source = "../modules/cloudwatch"
+
+  namespace = var.app_name
+}
+
 module "security_group" {
   source = "../modules/security_group"
 
@@ -60,6 +66,7 @@ module "ecs" {
   ecr_tag                            = var.ecr_tag
   security_groups                    = module.security_group.ecs_security_group_ids
   alb_target_group_arn               = module.alb.alb_target_group_arn
+  aws_cloudwatch_log_group_name      = module.log.aws_cloudwatch_log_group_name
   deployment_maximum_percent         = var.ecs.deployment_maximum_percent
   deployment_minimum_healthy_percent = var.ecs.deployment_minimum_healthy_percent
   web_container_cpu                  = var.ecs.web_container_cpu

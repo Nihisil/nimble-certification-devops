@@ -28,6 +28,7 @@ locals {
     deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
     aws_ecr_repository                 = data.aws_ecr_repository.repo.repository_url
     aws_ecr_tag                        = var.ecr_tag
+    aws_cloudwatch_log_group_name      = var.aws_cloudwatch_log_group_name
 
     environment_variables = local.environment_variables
     secrets_variables     = var.secrets_variables
