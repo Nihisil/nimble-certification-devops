@@ -72,6 +72,11 @@ variable "secret_arns" {
   type        = list(string)
 }
 
+variable "desired_count" {
+  description = "ECS task definition instance number"
+  type        = number
+}
+
 variable "aws_cloudwatch_log_group_name" {
   description = "AWS CloudWatch Log Group name"
   type        = string

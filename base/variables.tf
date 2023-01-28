@@ -54,6 +54,7 @@ variable "ecs" {
   type = object({
     web_container_cpu                  = number
     web_container_memory               = number
+    task_desired_count                 = number
     deployment_maximum_percent         = number
     deployment_minimum_healthy_percent = number
   })
