@@ -9,6 +9,12 @@ data "aws_ecs_task_definition" "task" {
 }
 
 locals {
+  container_terraformed_envs = toset([
+    { name = "HEALTH_PATH", value = var.health_check_path },
+    { name = "PHX_HOST", value = var.app_host },
+    { name = "PORT", value = var.app_port },
+  ])
+
   # Environment variables from other variables
   environment_variables = toset([
     {

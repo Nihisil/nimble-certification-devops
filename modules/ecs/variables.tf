@@ -76,3 +76,9 @@ variable "desired_count" {
   description = "ECS task definition instance number"
   type        = number
 }
+
+variable "health_check_path" {
+  description = "Application health check path"
+  type        = string
+}
+
