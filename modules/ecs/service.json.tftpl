@@ -12,6 +12,14 @@
         "protocol": "tcp"
       }
     ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-region": "${region}",
+        "awslogs-stream-prefix": "${namespace}-service",
+        "awslogs-group": "${aws_cloudwatch_log_group_name}"
+      }
+    },
     "environment": ${jsonencode(environment_variables)},
     "secrets": ${jsonencode(secrets_variables)},
     "ulimits": [
