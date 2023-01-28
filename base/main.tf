@@ -39,8 +39,6 @@ module "kms" {
   namespace = local.namespace
 
   secrets = {
-    database_url = ""
-
     secret_key_base = var.secret_key_base
   }
 }

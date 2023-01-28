@@ -13,6 +13,7 @@ locals {
     { name = "HEALTH_PATH", value = var.health_check_path },
     { name = "PHX_HOST", value = var.app_host },
     { name = "PORT", value = var.app_port },
+    { name = "DATABASE_URL", value = "" },
   ])
 
   # Environment variables from other variables
