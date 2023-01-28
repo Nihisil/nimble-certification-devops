@@ -71,3 +71,8 @@ variable "secret_arns" {
   description = "The secrets ARNs for Task Definition"
   type        = list(string)
 }
+
+variable "aws_cloudwatch_log_group_name" {
+  description = "AWS CloudWatch Log Group name"
+  type        = string
+}
