@@ -144,6 +144,7 @@ resource "aws_ecs_service" "main" {
   launch_type                        = "FARGATE"
   deployment_maximum_percent         = var.deployment_maximum_percent
   deployment_minimum_healthy_percent = var.deployment_minimum_healthy_percent
+  desired_count                      = var.desired_count
   task_definition                    = "${aws_ecs_task_definition.main.family}:${max(aws_ecs_task_definition.main.revision, data.aws_ecs_task_definition.task.revision)}"
 
   deployment_circuit_breaker {

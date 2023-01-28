@@ -64,6 +64,7 @@ module "ecs" {
   deployment_minimum_healthy_percent = var.ecs.deployment_minimum_healthy_percent
   web_container_cpu                  = var.ecs.web_container_cpu
   web_container_memory               = var.ecs.web_container_memory
+  desired_count                      = var.ecs.task_desired_count
 
   secrets_variables = module.kms.secrets_variables
   secret_arns       = module.kms.secret_arns

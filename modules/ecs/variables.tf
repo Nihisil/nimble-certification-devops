@@ -71,3 +71,8 @@ variable "secret_arns" {
   description = "The secrets ARNs for Task Definition"
   type        = list(string)
 }
+
+variable "desired_count" {
+  description = "ECS task definition instance number"
+  type        = number
+}
