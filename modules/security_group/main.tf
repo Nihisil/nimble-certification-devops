@@ -18,6 +18,18 @@ resource "aws_security_group" "ecs_fargate" {
   }
 }
 
+#tfsec:ignore:aws-ec2-no-public-ingress-sgr
+resource "aws_security_group_rule" "allow_incoming_http" {
+  type              = "ingress"
+  from_port         = 0
+  to_port           = 80
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  ipv6_cidr_blocks  = ["::/0"]
+  security_group_id = aws_security_group.alb.id
+  description       = "From Internet to ALB"
+}
+
 resource "aws_security_group_rule" "ecs_fargate_ingress_alb" {
   type                     = "ingress"
   security_group_id        = aws_security_group.ecs_fargate.id
