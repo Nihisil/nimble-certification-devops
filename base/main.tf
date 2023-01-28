@@ -39,6 +39,8 @@ module "kms" {
   namespace = local.namespace
 
   secrets = {
+    database_url = ""
+
     secret_key_base = var.secret_key_base
   }
 }
@@ -72,6 +74,7 @@ module "ecs" {
   web_container_cpu                  = var.ecs.web_container_cpu
   web_container_memory               = var.ecs.web_container_memory
   desired_count                      = var.ecs.task_desired_count
+  health_check_path                  = var.health_check_path
 
   secrets_variables = module.kms.secrets_variables
   secret_arns       = module.kms.secret_arns

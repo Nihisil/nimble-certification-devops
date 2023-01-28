@@ -77,6 +77,11 @@ variable "desired_count" {
   type        = number
 }
 
+variable "health_check_path" {
+  description = "Application health check path"
+  type        = string
+}
+
 variable "aws_cloudwatch_log_group_name" {
   description = "AWS CloudWatch Log Group name"
   type        = string
