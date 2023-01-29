@@ -8,6 +8,26 @@ resource "aws_security_group" "alb" {
   }
 }
 
+resource "aws_security_group_rule" "alb_ingress_http" {
+  type              = "ingress"
+  security_group_id = aws_security_group.alb.id
+  protocol          = "tcp"
+  from_port         = 80
+  to_port           = 80
+  cidr_blocks       = ["0.0.0.0/0"]
+  description       = ""
+}
+
+resource "aws_security_group_rule" "alb_egress" {
+  type              = "egress"
+  security_group_id = aws_security_group.alb.id
+  protocol          = "tcp"
+  from_port         = var.app_port
+  to_port           = var.app_port
+  cidr_blocks       = ["0.0.0.0/0"]
+  description       = ""
+}
+
 resource "aws_security_group" "ecs_fargate" {
   name        = "${var.namespace}-ecs-fargate-sg"
   description = "ECS Fargate Security Group"
@@ -16,18 +36,6 @@ resource "aws_security_group" "ecs_fargate" {
   tags = {
     Name = "${var.namespace}-ecs-fargate-sg"
   }
-}
-
-#tfsec:ignore:aws-ec2-no-public-ingress-sgr
-resource "aws_security_group_rule" "allow_incoming_http" {
-  type              = "ingress"
-  from_port         = 0
-  to_port           = 80
-  protocol          = "tcp"
-  cidr_blocks       = ["0.0.0.0/0"]
-  ipv6_cidr_blocks  = ["::/0"]
-  security_group_id = aws_security_group.alb.id
-  description       = "From Internet to ALB"
 }
 
 resource "aws_security_group_rule" "ecs_fargate_ingress_alb" {
