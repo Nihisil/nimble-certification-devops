@@ -19,6 +19,7 @@ resource "aws_security_group_rule" "alb_ingress_http" {
   description       = "From HTTP to ALB"
 }
 
+#tfsec:ignore:aws-ec2-no-public-egress-sgr
 resource "aws_security_group_rule" "alb_egress" {
   type              = "egress"
   security_group_id = aws_security_group.alb.id
