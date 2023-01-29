@@ -8,6 +8,7 @@ resource "aws_security_group" "alb" {
   }
 }
 
+#tfsec:ignore:aws-ec2-no-public-ingress-sgr
 resource "aws_security_group_rule" "alb_ingress_http" {
   type              = "ingress"
   security_group_id = aws_security_group.alb.id
@@ -15,7 +16,7 @@ resource "aws_security_group_rule" "alb_ingress_http" {
   from_port         = 80
   to_port           = 80
   cidr_blocks       = ["0.0.0.0/0"]
-  description       = ""
+  description       = "From HTTP to ALB"
 }
 
 resource "aws_security_group_rule" "alb_egress" {
@@ -25,7 +26,7 @@ resource "aws_security_group_rule" "alb_egress" {
   from_port         = var.app_port
   to_port           = var.app_port
   cidr_blocks       = ["0.0.0.0/0"]
-  description       = ""
+  description       = "From ALB to app"
 }
 
 resource "aws_security_group" "ecs_fargate" {
