@@ -7,3 +7,8 @@ output "secret_arns" {
   description = "The secrets ARNs for Task Definition"
   value       = local.secret_arns
 }
+
+output "secret_cloudwatch_log_key_arn" {
+  description = "The key to use for logs encryption"
+  value       = local.secret_cloudwatch_log_key_arn
+}

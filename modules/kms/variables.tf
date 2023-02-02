@@ -14,3 +14,8 @@ variable "deletion_window" {
   type        = number
   default     = 7
 }
+
+variable "region" {
+  description = "AWS region"
+  type        = string
+}
