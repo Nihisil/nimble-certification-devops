@@ -6,6 +6,8 @@ terraform {
       name = "devops-ic-shared"
     }
   }
+
+  required_version = "1.3.7"
 }
 
 module "ecr" {
