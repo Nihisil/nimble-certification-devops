@@ -9,6 +9,6 @@ output "secret_arns" {
 }
 
 output "secret_cloudwatch_log_key_arn" {
-  description = "The key to use for logs encryption"
+  description = "The key to use for cloudwatch logs encryption"
   value       = local.secret_cloudwatch_log_key_arn
 }
