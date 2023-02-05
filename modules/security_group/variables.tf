@@ -17,3 +17,8 @@ variable "private_subnets_cidr_blocks" {
   description = "Private subnet CIDR blocks"
   type        = list(string)
 }
+
+variable "rds_port" {
+  description = "The DB port"
+  type        = number
+}
