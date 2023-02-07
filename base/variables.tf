@@ -84,3 +84,8 @@ variable "rds_autoscaling_max_capacity" {
   description = "Maximum number of RDS read replicas when autoscaling is enabled"
   default     = 5
 }
+
+variable "elasticache_port" {
+  description = "Elasticache port"
+  default     = 6379
+}
