@@ -9,3 +9,13 @@ terraform {
 
   required_version = "1.3.7"
 }
+
+locals {
+  namespace = "${var.app_name}-${var.environment}"
+}
+
+module "vpc" {
+  source = "../modules/vpc"
+
+  namespace = local.namespace
+}
