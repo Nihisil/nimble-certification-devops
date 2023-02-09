@@ -28,3 +28,8 @@ variable "aws_secret_key" {
   description = "AWS Access Key Secret"
   type        = string
 }
+
+variable "secret_key_base" {
+  description = "The Secret key base for the application"
+  type        = string
+}
