@@ -110,3 +110,63 @@ resource "aws_security_group_rule" "elasticache_ingress_app_fargate" {
   source_security_group_id = aws_security_group.ecs_fargate.id
   description              = "From app to cache"
 }
+
+resource "aws_security_group" "bastion" {
+  name        = "${var.namespace}-bastion"
+  description = "Bastion Security Group"
+  vpc_id      = var.vpc_id
+
+  tags = {
+    Name = "${var.namespace}-bastion-sg"
+  }
+}
+
+resource "aws_security_group_rule" "bastion_ingress_ssh" {
+  type              = "ingress"
+  security_group_id = aws_security_group.bastion.id
+  from_port         = 22
+  to_port           = 22
+  protocol          = "tcp"
+  cidr_blocks       = ["${var.bastion_allowed_ip_connection}/32"]
+  description       = "Allowed IP connection"
+}
+
+resource "aws_security_group_rule" "elasticache_ingress_bastion" {
+  type                     = "ingress"
+  security_group_id        = aws_security_group.elasticache.id
+  from_port                = var.elasticache_port
+  to_port                  = var.elasticache_port
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.bastion.id
+  description              = "From bastion to ElastiCache"
+}
+
+resource "aws_security_group_rule" "bastion_egress_elasticache" {
+  type                     = "egress"
+  security_group_id        = aws_security_group.bastion.id
+  from_port                = var.elasticache_port
+  to_port                  = var.elasticache_port
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.elasticache.id
+  description              = "From ElastiCache to bastion"
+}
+
+resource "aws_security_group_rule" "rds_ingress_bastion" {
+  type                     = "ingress"
+  security_group_id        = aws_security_group.rds.id
+  from_port                = var.rds_port
+  to_port                  = var.rds_port
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.bastion.id
+  description              = "From bastion to RDS"
+}
+
+resource "aws_security_group_rule" "bastion_egress_rds" {
+  type                     = "egress"
+  security_group_id        = aws_security_group.bastion.id
+  from_port                = var.rds_port
+  to_port                  = var.rds_port
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.rds.id
+  description              = "From RDS to bastion"
+}

@@ -27,3 +27,8 @@ variable "elasticache_port" {
   description = "The cache node port"
   type        = number
 }
+
+variable "bastion_allowed_ip_connection" {
+  description = "IP that can be connected to Bastion instance"
+  type        = string
+}
