@@ -1,3 +1,9 @@
+data "aws_caller_identity" "current" {}
+
+locals {
+  aws_account_id = data.aws_caller_identity.current.account_id
+}
+
 resource "aws_kms_key" "service_key" {
   description             = "KMS key for ${var.namespace}-service"
   enable_key_rotation     = true
@@ -5,6 +11,49 @@ resource "aws_kms_key" "service_key" {
 
   tags = {
     Name = "${var.namespace}-kms-key"
+  }
+}
+
+resource "aws_kms_key" "cloudwatch_log_key" {
+  description         = "KMS key for ${var.namespace} cloudwatch logs"
+  enable_key_rotation = true
+  policy              = data.aws_iam_policy_document.cloudwatch_log_key.json
+
+  tags = {
+    Name = "${var.namespace}-kms-cloudwatch-log-key"
+  }
+}
+
+data "aws_iam_policy_document" "cloudwatch_log_key" {
+  statement {
+    sid       = "Enable IAM User Permissions"
+    effect    = "Allow"
+    actions   = ["kms:*"]
+    resources = ["*"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${local.aws_account_id}:root"]
+    }
+  }
+
+  statement {
+    effect = "Allow"
+    actions = [
+      "kms:Encrypt*",
+      "kms:Decrypt*",
+      "kms:ReEncrypt*",
+      "kms:GenerateDataKey*",
+      "kms:Describe*"
+    ]
+    resources = ["*"]
+
+    principals {
+      type = "Service"
+      identifiers = [
+        "logs.${var.region}.amazonaws.com",
+      ]
+    }
   }
 }
 
@@ -50,4 +99,6 @@ locals {
   secrets_variables = [for secret_key, secret_arn in local.secrets_name_arn_map :
     tomap({ "name" = upper(secret_key), "valueFrom" = secret_arn })
   ]
+
+  secret_cloudwatch_log_key_arn = aws_kms_key.cloudwatch_log_key.arn
 }
