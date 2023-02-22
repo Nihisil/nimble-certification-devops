@@ -43,3 +43,16 @@ variable "health_check_path" {
   description = "The health check path of the Application"
   type        = string
 }
+
+variable "ecs" {
+  description = "ECS input variables"
+  type = object({
+    web_container_cpu                  = number
+    web_container_memory               = number
+    task_desired_count                 = number
+    deployment_maximum_percent         = number
+    deployment_minimum_healthy_percent = number
+    max_capacity                       = number
+    max_cpu_threshold                  = number
+  })
+}
