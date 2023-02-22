@@ -6,17 +6,13 @@ terraform {
       name = "devops-ic-shared"
     }
   }
+
+  required_version = "1.3.7"
 }
 
-provider "aws" {
-  region     = var.region
-  access_key = var.aws_access_key
-  secret_key = var.aws_secret_key
+module "ecr" {
+  source = "../modules/ecr"
 
-  default_tags {
-    tags = {
-      Environment = var.environment
-      Owner       = var.owner
-    }
-  }
+  namespace   = var.app_name
+  image_limit = var.image_limit
 }

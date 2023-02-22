@@ -1,3 +1,8 @@
+variable "app_name" {
+  description = "Application name"
+  type        = string
+}
+
 variable "environment" {
   description = "The application environment, used to tag the resources, e.g. `acme-web-staging`"
   type        = string
@@ -22,4 +27,9 @@ variable "aws_access_key" {
 variable "aws_secret_key" {
   description = "AWS Access Key Secret"
   type        = string
+}
+
+variable "image_limit" {
+  description = "Sets max amount of the latest develop images to be kept"
+  default     = 5
 }
