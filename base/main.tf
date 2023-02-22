@@ -34,6 +34,7 @@ module "kms" {
   region    = var.region
 
   secrets = {
+    database_url    = module.rds.db_url
     secret_key_base = var.secret_key_base
   }
 }
@@ -45,6 +46,7 @@ module "security_group" {
   vpc_id                      = module.vpc.vpc_id
   app_port                    = var.app_port
   private_subnets_cidr_blocks = module.vpc.private_subnets_cidr_blocks
+  rds_port                    = var.rds_port
 }
 
 module "s3" {
@@ -87,4 +89,23 @@ module "ecs" {
 
   secrets_variables = module.kms.secrets_variables
   secret_arns       = module.kms.secret_arns
+}
+
+module "rds" {
+  source = "../modules/rds"
+
+  namespace = local.namespace
+
+  vpc_security_group_ids = module.security_group.rds_security_group_ids
+  vpc_id                 = module.vpc.vpc_id
+  subnet_ids             = module.vpc.private_subnet_ids
+
+  instance_type = var.rds_instance_type
+  database_name = var.environment
+  username      = var.rds_username
+  password      = var.rds_password
+  port          = var.rds_port
+
+  autoscaling_min_capacity = var.rds_autoscaling_min_capacity
+  autoscaling_max_capacity = var.rds_autoscaling_max_capacity
 }
