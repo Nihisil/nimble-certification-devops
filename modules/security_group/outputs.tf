@@ -12,3 +12,8 @@ output "rds_security_group_ids" {
   description = "Security group IDs for Aurora"
   value       = [aws_security_group.rds.id]
 }
+
+output "elasticache_security_group_ids" {
+  description = "Security group IDs for Elasticache"
+  value       = [aws_security_group.elasticache.id]
+}

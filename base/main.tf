@@ -35,6 +35,7 @@ module "kms" {
 
   secrets = {
     database_url    = module.rds.db_url
+    redis_url       = module.elasticache.redis_primary_endpoint
     secret_key_base = var.secret_key_base
   }
 }
@@ -47,6 +48,7 @@ module "security_group" {
   app_port                    = var.app_port
   private_subnets_cidr_blocks = module.vpc.private_subnets_cidr_blocks
   rds_port                    = var.rds_port
+  elasticache_port            = var.elasticache_port
 }
 
 module "s3" {
@@ -108,4 +110,14 @@ module "rds" {
 
   autoscaling_min_capacity = var.rds_autoscaling_min_capacity
   autoscaling_max_capacity = var.rds_autoscaling_max_capacity
+}
+
+module "elasticache" {
+  source = "../modules/elasticache"
+
+  namespace = local.namespace
+
+  subnet_ids         = module.vpc.private_subnet_ids
+  security_group_ids = module.security_group.elasticache_security_group_ids
+  port               = var.elasticache_port
 }

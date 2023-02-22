@@ -90,3 +90,23 @@ resource "aws_security_group_rule" "rds_ingress_app_fargate" {
   source_security_group_id = aws_security_group.ecs_fargate.id
   description              = "From app to DB"
 }
+
+resource "aws_security_group" "elasticache" {
+  name        = "${var.namespace}-elasticache"
+  description = "Elasticache Security Group"
+  vpc_id      = var.vpc_id
+
+  tags = {
+    Name = "${var.namespace}-elasticache-sg"
+  }
+}
+
+resource "aws_security_group_rule" "elasticache_ingress_app_fargate" {
+  type                     = "ingress"
+  security_group_id        = aws_security_group.elasticache.id
+  from_port                = var.elasticache_port
+  to_port                  = var.elasticache_port
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.ecs_fargate.id
+  description              = "From app to cache"
+}
