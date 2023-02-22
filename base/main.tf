@@ -43,12 +43,13 @@ module "kms" {
 module "security_group" {
   source = "../modules/security_group"
 
-  namespace                   = local.namespace
-  vpc_id                      = module.vpc.vpc_id
-  app_port                    = var.app_port
-  private_subnets_cidr_blocks = module.vpc.private_subnets_cidr_blocks
-  rds_port                    = var.rds_port
-  elasticache_port            = var.elasticache_port
+  namespace                     = local.namespace
+  vpc_id                        = module.vpc.vpc_id
+  app_port                      = var.app_port
+  private_subnets_cidr_blocks   = module.vpc.private_subnets_cidr_blocks
+  rds_port                      = var.rds_port
+  elasticache_port              = var.elasticache_port
+  bastion_allowed_ip_connection = var.bastion_allowed_ip_connection
 }
 
 module "s3" {
@@ -120,4 +121,13 @@ module "elasticache" {
   subnet_ids         = module.vpc.private_subnet_ids
   security_group_ids = module.security_group.elasticache_security_group_ids
   port               = var.elasticache_port
+}
+
+module "bastion" {
+  source = "../modules/bastion"
+
+  namespace = local.namespace
+
+  subnet_ids                  = module.vpc.public_subnet_ids
+  instance_security_group_ids = module.security_group.bastion_security_group_ids
 }

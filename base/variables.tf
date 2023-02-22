@@ -89,3 +89,8 @@ variable "elasticache_port" {
   description = "Elasticache port"
   default     = 6379
 }
+
+variable "bastion_allowed_ip_connection" {
+  description = "IP that can be connected to Bastion instance"
+  type        = string
+}
