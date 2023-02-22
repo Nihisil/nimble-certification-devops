@@ -17,7 +17,7 @@ ECS Fargate instance type:
 
 ## Required software
 
-The modifications to the infrastructure are being brought about through Terraform Cloud.
+Terraform Cloud is used to make modifications to the infrastructure.
 
 Once the code is pushed to the appropriate branch, a Terraform plan is performed for the related infrastructure version.
 
